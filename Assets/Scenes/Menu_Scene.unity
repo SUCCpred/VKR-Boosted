@@ -2381,6 +2381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spaceMachineButton: {fileID: 2076048427}
+  _QRCodeReadButton: {fileID: 1655250}
 --- !u!114 &1024944361
 MonoBehaviour:
   m_ObjectHideFlags: 0

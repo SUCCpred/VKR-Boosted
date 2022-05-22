@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AR_Ground_Scene.unity
     guid: b80859bd2f92bf34d840a05e9c143628
+  - enabled: 1
+    path: Assets/Scenes/QRScaner.unity
+    guid: 44a2cebc1da08034f9f02e6eba8ad390
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 33a931fdc2f877a46bedc4a199e8bb64, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: f9f2421f81c4dc845ab18370b64a6f19, type: 2}

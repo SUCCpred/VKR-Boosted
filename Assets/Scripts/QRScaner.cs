@@ -1,7 +1,8 @@
 using ZXing;
-using ZXing.QrCode;
 using UnityEngine;
 using System;
+using Assets.CodeBase.Infrastructure;
+using Assets.CodeBase.Infrastructure.StateMachine.States;
 
 class QRScaner: MonoBehaviour
 {
@@ -10,6 +11,7 @@ class QRScaner: MonoBehaviour
 
     private WebCamTexture camTexture;
     private Rect screenRect;
+    private bool detected = false;
 
     void Start()
     {
@@ -20,8 +22,8 @@ class QRScaner: MonoBehaviour
             Debug.Log(String.Format("{0} : {1}", i, devices[i].name));
         }
 
-        screenRect = new Rect(0, 0, Screen.width, Screen.height);
-        camTexture = new WebCamTexture(devices[0].name, Screen.width, Screen.height);
+        //screenRect = new Rect(0, 0, Screen.width, Screen.height);
+        camTexture = new WebCamTexture();
 
         if (camTexture != null)
         {
@@ -38,24 +40,32 @@ class QRScaner: MonoBehaviour
         // drawing the camera on screen
         GUI.DrawTexture(screenRect, camTexture, ScaleMode.ScaleToFit);
         // do the reading — you might want to attempt to read less often than you draw on the screen for performance sake
-        if (camTexture.isPlaying)
+        if (!detected)
         {
-            try
+            if (camTexture.isPlaying)
             {
-                IBarcodeReader barcodeReader = new BarcodeReader();
-                // decode the current frame
-                var result = barcodeReader.Decode(camTexture.GetPixels32(),
-                  camTexture.width, camTexture.height);
-                if (result != null)
+                try
                 {
-                    Debug.Log("DECODED TEXT FROM QR: " + result.Text);
-
+                    IBarcodeReader barcodeReader = new BarcodeReader();
+                    // decode the current frame
+                    var result = barcodeReader.Decode(camTexture.GetPixels32(),
+                      camTexture.width, camTexture.height);
+                    if (result != null)
+                    {
+                        Debug.Log("DECODED TEXT FROM QR: " + result.Text);
+                        string[] param = result.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+                        detected = true;
+                        ModelLoader._id = param[0];
+                        ModelLoader._prefabName = param[1];
+                        GameBootstrapper.Instance.Game.StateMachine.Enter<LoadLevelState, string>("AR_Ground_Scene");
                 }
+                }
+                catch (Exception ex) { Debug.LogWarning(ex.Message); }
             }
-            catch (Exception ex) { Debug.LogWarning(ex.Message); }
-        } else
-        {
-            camTexture.Play();
+            else
+            {
+                camTexture.Play();
+            }
         }
     }
 }
