@@ -46,6 +46,9 @@ public class JSONLoader : MonoBehaviour
             //JSONObject obj = new JSONObject(_jsonString);
 
             //Config obj = JsonUtility.FromJson<Config>(_jsonString);
+            Newtonsoft.Json.Utilities.AotHelper.EnsureList<Config.Museum>();
+            Newtonsoft.Json.Utilities.AotHelper.EnsureList<Config.Exhibit>();
+            
             Config obj = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(_jsonString);
 
             //Debug.Log(obj);
