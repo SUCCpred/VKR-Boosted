@@ -27,19 +27,35 @@ public class Exhibit : MonoBehaviour
             viewPanel.SetActive(true);
             GameObject.Find("View_Заголовок").GetComponent<TextMeshProUGUI>().text = title.text;
             GameObject.Find("View_Описание").GetComponent<TextMeshProUGUI>().text = prefabDescription;
+            GameObject.Find("View_Image").GetComponent<Image>().sprite = image.sprite;
         });
     }
-    public void Init(JSONLoader.Config.Exhibit exhibit, Sprite _sprite, GameObject _objPanel, GameObject _search, GameObject _viewPanel)
+    public void Init(JSONLoader.Config.Exhibit exhibit, Sprite sprite, GameObject objPanel, GameObject _search, GameObject _viewPanel)
     {
         this.name = String.Format("Exhibit[{0}]", exhibit.id);
         prefabDescription = exhibit.discription;
         title.text = exhibit.title;
         discription.text = prefabDescription.Length > 100 ? String.Format("{0}...", prefabDescription.Substring(0, 100)) : prefabDescription;
-        //тут будет обработка картинки
+
+        LoadImage(exhibit.image, (_image) => {
+            if (_image != null)
+            {
+                sprite = Sprite.Create(_image, new Rect(0.0f, 0.0f, _image.width, _image.height), new Vector2(0.5f, 0.5f), 100.0f);
+                image.sprite = sprite;
+            }
+        });
+
         id = exhibit.id;
         prefabName = exhibit.pref_name;
-        objPanel = _objPanel;
+        this.objPanel = objPanel;
         search = _search;
         viewPanel = _viewPanel;
+    }
+    public void LoadImage(string path, Action<Texture2D> callback)
+    {
+        StartCoroutine(Api.DownloadImage(path, (response) =>
+        {
+            callback(response);
+        }));
     }
 }

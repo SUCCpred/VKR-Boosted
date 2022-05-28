@@ -14,15 +14,16 @@ public class Museum : MonoBehaviour
     private GameObject objPanel;
     private GameObject search;
     private GameObject viewPanel;
+    private Sprite exhImage;
     private Button button;
 
     void Awake()
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(() => {
-            BuildExhibits();
             objPanel.SetActive(true);
             orgPanel.SetActive(false);
+            BuildExhibits();
         });
     }
     
@@ -37,7 +38,7 @@ public class Museum : MonoBehaviour
         foreach (JSONLoader.Config.Exhibit exhibit in myMuseumExhibits)
         {
             Exhibit exhibitObj = Instantiate(Resources.Load<GameObject>("Prefabs/Exhibit"), museumExhibitsParent).GetComponent<Exhibit>();
-            exhibitObj.Init(exhibit, null, objPanel, search, viewPanel);
+            exhibitObj.Init(exhibit, exhImage, objPanel, search, viewPanel);
         }
     }
 

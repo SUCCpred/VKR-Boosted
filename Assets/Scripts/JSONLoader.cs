@@ -55,6 +55,7 @@ public class JSONLoader : MonoBehaviour
 
             foreach (Config.Museum museum in obj.museums)
             {
+
                 Museum MuseumInstance = Instantiate(museumPrefab, museumParent);
 
                 MuseumInstance.Init(museum.name, null, orgPanel, objPanel, search, viewPanel, museumExhibitsParent, (JSONLoader.Config.Exhibit[])museum.exhibits);
